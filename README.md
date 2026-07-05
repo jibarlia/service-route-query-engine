@@ -141,8 +141,8 @@ Example response:
 ```json
 {
   "nodes": [
-    { "id": "auth-service", "name": "auth-service", "kind": "service", "public": false, "vulnerable": true },
-    { "id": "prod-postgresdb", "name": "prod-postgresdb", "kind": "rds", "public": false, "vulnerable": false }
+    { "name": "auth-service", "kind": "service", "public": false, "vulnerable": true },
+    { "name": "prod-postgresdb", "kind": "rds", "public": false, "vulnerable": false }
   ],
   "edges": [
     { "from": "auth-service", "to": "prod-postgresdb" }

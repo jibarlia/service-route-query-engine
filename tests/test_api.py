@@ -2,8 +2,8 @@
 
 from fastapi.testclient import TestClient
 
-from app.api.routes import _build_filters
 from app.filters.exclude_stub_filter import ExcludeStubFilter
+from app.filters.filter_factory import FilterFactory
 from app.main import app
 from app.schemas.requests import RouteQuery
 
@@ -11,7 +11,7 @@ client = TestClient(app)
 
 
 def test_build_filters_should_always_include_exclude_stub_filter():
-    filters = _build_filters(RouteQuery())
+    filters = FilterFactory.build(RouteQuery())
 
     assert any(isinstance(f, ExcludeStubFilter) for f in filters)
 

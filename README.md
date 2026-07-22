@@ -37,8 +37,11 @@ The filtering system is generic: adding a new filter is a small, isolated change
 - **Traversal, filtering, and the web layer are fully decoupled.** The DFS knows nothing about
   filters; filters know nothing about traversal; neither imports FastAPI. Each concern can evolve
   independently and is trivial to unit-test.
-- **Filters are a Strategy.** Every filter implements a single `matches(route) -> bool` method behind
-  a `RouteFilter` protocol. The engine just keeps routes that pass all active filters.
+- **Filters are a self-registering Strategy.** Every filter implements a single `matches(route) -> bool`
+  method behind a `RouteFilter` protocol, and a `from_query` classmethod that builds it from the request.
+  Filters register themselves via `@register_filter` and are auto-discovered on import, so the web layer
+  assembles the active filter list from the registry without a hand-maintained builder list. The engine
+  just keeps routes that pass all active filters.
 - **`Subgraph` is a first-class concept.** The engine exposes `find_routes(filters)` and
   `build_subgraph(routes)` as two explicit steps. The subgraph is the union of the nodes and edges
   the matching routes touch — this is exactly what makes the `{nodes, edges, routes}` response
@@ -157,10 +160,15 @@ Interactive Swagger UI is available at `/docs`.
 
 ### Adding a filter
 
-1. Add a class with a `matches(self, route: Route) -> bool` method in `app/filters/`.
-2. Wire it into `_build_filters` in [`app/api/routes.py`](app/api/routes.py).
+1. Drop a module in `app/filters/` with a class that:
+   - is decorated with `@register_filter`,
+   - has a `from_query(cls, query: RouteQuery) -> RouteFilter | None` classmethod (return `None` to skip the filter for a given request, or an instance to apply it), and
+   - has a `matches(self, route: Route) -> bool` method.
+2. If the filter is driven by a request parameter, add the corresponding field to `RouteQuery` in [`app/schemas/requests.py`](app/schemas/requests.py).
 
-No traversal or engine code changes.
+The filter is auto-discovered on import and assembled by `FilterFactory` in
+[`app/filters/filter_factory.py`](app/filters/filter_factory.py), so no changes to [`app/api/routes.py`](app/api/routes.py),
+traversal, or engine code are needed.
 
 ---
 

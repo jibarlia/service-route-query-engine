@@ -1,9 +1,11 @@
 """FastAPI dependency providers for the API layer."""
 
-from app.repositories.json_graph_repository import load_graph
+from fastapi import Request
+
 from app.services.query_engine import QueryEngine
 
 
-def get_engine() -> QueryEngine:
-    # The graph is loaded once and cached; the engine is a thin stateless wrapper.
-    return QueryEngine(load_graph())
+def get_engine(request: Request) -> QueryEngine:
+    # The engine is an app-lifetime singleton built in the lifespan handler, so
+    # its memoized route enumeration is reused across every request.
+    return request.app.state.engine

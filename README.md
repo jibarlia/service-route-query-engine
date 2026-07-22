@@ -34,6 +34,15 @@ The filtering system is generic: adding a new filter is a small, isolated change
 
 - **The graph is immutable and loaded once.** It is parsed from JSON and cached with
   `functools.lru_cache`, then represented as an in-memory adjacency list for O(1) neighbor lookups.
+- **Route enumeration is memoized per process.** Enumerating all source → sink paths is exhaustive
+  (worst-case exponential) and independent of the filters, which are applied afterwards. Since the
+  graph is immutable, the enumeration is a pure function of it, so the engine computes it once and
+  reuses it across requests. The engine is an app-lifetime singleton built in a FastAPI `lifespan`
+  handler and stored on `app.state`, which is what lets the memoized routes persist between requests.
+  The lazy init is intentionally lock-free: sync endpoints run in a threadpool, so two concurrent
+  first requests could race it, but the computation is pure and idempotent and the assignment is
+  atomic under the GIL — the worst case is one redundant enumeration, so a lock would be needless
+  overhead for a read-only computation.
 - **Traversal, filtering, and the web layer are fully decoupled.** The DFS knows nothing about
   filters; filters know nothing about traversal; neither imports FastAPI. Each concern can evolve
   independently and is trivial to unit-test.

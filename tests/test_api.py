@@ -1,5 +1,6 @@
 """Sanity integration test for the /routes endpoint against the real graph."""
 
+import pytest
 from fastapi.testclient import TestClient
 
 from app.filters.exclude_stub_filter import ExcludeStubFilter
@@ -7,7 +8,13 @@ from app.filters.filter_factory import FilterFactory
 from app.main import app
 from app.schemas.requests import RouteQuery
 
-client = TestClient(app)
+
+@pytest.fixture
+def client():
+    # Context manager triggers the lifespan handler, which builds the engine
+    # singleton on app.state.
+    with TestClient(app) as test_client:
+        yield test_client
 
 
 def test_build_filters_should_always_include_exclude_stub_filter():
@@ -16,7 +23,7 @@ def test_build_filters_should_always_include_exclude_stub_filter():
     assert any(isinstance(f, ExcludeStubFilter) for f in filters)
 
 
-def test_routes_endpoint_should_return_a_renderable_subgraph():
+def test_routes_endpoint_should_return_a_renderable_subgraph(client):
     response = client.get("/routes", params={"has_vulnerability": "true"})
 
     assert response.status_code == 200

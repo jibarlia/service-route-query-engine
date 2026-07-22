@@ -1,5 +1,7 @@
 """Unit tests for traversal, filtering, and subgraph reduction."""
 
+from unittest.mock import patch
+
 from app.domain.edge import Edge
 from app.domain.graph import Graph
 from app.domain.node import Node
@@ -22,6 +24,31 @@ def test_find_routes_should_enumerate_all_source_to_sink_paths(sample_graph):
 
 def test_find_routes_should_apply_filters_with_and_semantics(sample_graph):
     engine = QueryEngine(sample_graph)
+
+    routes = engine.find_routes([EndInSinkFilter(sink_kinds=["rds"])])
+
+    assert _route_ids(routes) == {("auth", "order", "postgres")}
+
+
+def test_find_routes_should_enumerate_routes_only_once_across_calls(sample_graph):
+    # The enumeration is memoized: a second call must not re-traverse the graph.
+    engine = QueryEngine(sample_graph)
+
+    with patch.object(sample_graph, "neighbors", wraps=sample_graph.neighbors) as spy:
+        first = engine.find_routes()
+        calls_after_first = spy.call_count
+        second = engine.find_routes()
+
+        assert spy.call_count == calls_after_first  # served from cache, no re-traversal
+
+    assert calls_after_first > 0  # the first call really did traverse
+    assert _route_ids(first) == _route_ids(second)
+
+
+def test_find_routes_should_apply_filters_against_cached_routes(sample_graph):
+    # Filtering runs against the memoized enumeration and is filter-independent.
+    engine = QueryEngine(sample_graph)
+    engine.find_routes()  # populate the cache with the unfiltered enumeration
 
     routes = engine.find_routes([EndInSinkFilter(sink_kinds=["rds"])])
 

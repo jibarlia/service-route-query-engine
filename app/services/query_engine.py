@@ -20,6 +20,7 @@ from app.filters.base import RouteFilter
 class QueryEngine:
     def __init__(self, graph: Graph) -> None:
         self._graph = graph
+        self._routes_cache: list[Route] | None = None
 
     def find_routes(self, filters: Iterable[RouteFilter] = ()) -> list[Route]:
         """Return every source->sink route that satisfies all filters (AND)."""
@@ -43,12 +44,21 @@ class QueryEngine:
         return all(f.matches(route) for f in filters)
 
     def _all_routes(self) -> list[Route]:
-        """Enumerate all simple (cycle-free) paths from every source to every sink."""
-        sinks = set(self._graph.sinks())
-        routes: list[Route] = []
-        for source in self._graph.sources():
-            self._dfs(source, sinks, [], set(), routes)
-        return routes
+        """Enumerate all simple (cycle-free) source->sink paths, memoized.
+
+        Enumeration is exhaustive (worst-case exponential) and independent of
+        any filters, which are applied downstream. The graph is immutable, so
+        the result is a pure function of it — compute once and reuse across
+        calls. The cached list is never handed out directly (``find_routes``
+        always returns a fresh filtered list), so callers cannot mutate it.
+        """
+        if self._routes_cache is None:
+            sinks = set(self._graph.sinks())
+            routes: list[Route] = []
+            for source in self._graph.sources():
+                self._dfs(source, sinks, [], set(), routes)
+            self._routes_cache = routes
+        return self._routes_cache
 
     def _dfs(
         self,

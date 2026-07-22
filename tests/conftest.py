@@ -1,8 +1,8 @@
 """Shared fixtures: a small, hand-built graph that exercises every filter.
 
-    auth (public) ──▶ user ──▶ travel
-        │
-        └──▶ order (vulnerable) ──▶ postgres (rds sink)
+auth (public) ──▶ user ──▶ travel
+    │
+    └──▶ order (vulnerable) ──▶ postgres (rds sink)
 """
 
 from __future__ import annotations

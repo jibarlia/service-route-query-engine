@@ -65,7 +65,7 @@ def _build_graph(payload: dict[str, Any]) -> Graph:
                         "Edge references undeclared node; creating stub",
                         extra={"node": name},
                     )
-                    nodes[name] = Node(name=name, kind=_STUB_KIND)
+                    nodes[name] = Node(name=name, kind=_STUB_KIND, is_stub=True)
             edges.append(Edge(source=source, target=target))
 
     return Graph(nodes=nodes, edges=edges)

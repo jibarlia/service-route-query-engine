@@ -16,6 +16,9 @@ class Node:
     name: str
     kind: str
     public_exposed: bool = False
+    # Set by the loader when this node is a placeholder for a dangling edge
+    # reference (declared nowhere, only referenced). Real nodes are never stubs.
+    is_stub: bool = False
     # Raw vulnerability findings attached to the service (empty when none).
     vulnerabilities: list[dict[str, Any]] = field(default_factory=list)
     # Everything else from the JSON we want to keep for the client (language,

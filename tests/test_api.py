@@ -4,9 +4,18 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
+from app.api.routes import _build_filters
+from app.filters.exclude_stub_filter import ExcludeStubFilter
 from app.main import app
+from app.schemas.requests import RouteQuery
 
 client = TestClient(app)
+
+
+def test_build_filters_should_always_include_exclude_stub_filter():
+    filters = _build_filters(RouteQuery())
+
+    assert any(isinstance(f, ExcludeStubFilter) for f in filters)
 
 
 def test_routes_endpoint_should_return_a_renderable_subgraph():

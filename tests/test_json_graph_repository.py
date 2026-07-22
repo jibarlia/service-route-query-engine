@@ -44,6 +44,7 @@ def test_undeclared_edge_target_should_get_a_stub_node(tmp_path):
 
     assert "ghost-service" in graph.nodes
     assert graph.get_node("ghost-service").kind == "unknown"
+    assert graph.get_node("ghost-service").is_stub is True
 
 
 def test_node_metadata_and_vulnerabilities_should_be_preserved(tmp_path):

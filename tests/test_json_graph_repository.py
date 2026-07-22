@@ -1,7 +1,5 @@
 """Unit tests for the JSON graph repository: parsing, normalization, robustness."""
 
-from __future__ import annotations
-
 import json
 from pathlib import Path
 

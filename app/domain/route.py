@@ -1,7 +1,5 @@
 """Route entity — one concrete path through the graph."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass
 
 from app.domain.node import Node

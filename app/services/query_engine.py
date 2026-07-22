@@ -7,8 +7,6 @@ Two independent responsibilities, deliberately kept separate:
 Traversal knows nothing about filters, and filters know nothing about traversal.
 """
 
-from __future__ import annotations
-
 from collections.abc import Iterable
 
 from app.domain.edge import Edge

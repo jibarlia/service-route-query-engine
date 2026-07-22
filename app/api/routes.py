@@ -4,8 +4,6 @@ Translates query params into the generic filter list, delegates traversal and
 subgraph reduction to the engine, and serializes the result.
 """
 
-from __future__ import annotations
-
 from collections.abc import Callable
 from typing import Annotated
 

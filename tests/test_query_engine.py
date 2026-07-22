@@ -1,7 +1,5 @@
 """Unit tests for traversal, filtering, and subgraph reduction."""
 
-from __future__ import annotations
-
 from app.domain.edge import Edge
 from app.domain.graph import Graph
 from app.domain.node import Node

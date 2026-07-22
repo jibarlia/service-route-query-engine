@@ -5,8 +5,6 @@ independent of traversal and of each other, so new filters can be added without
 touching the engine or existing filters.
 """
 
-from __future__ import annotations
-
 from typing import Protocol, runtime_checkable
 
 from app.domain.route import Route

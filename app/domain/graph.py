@@ -4,8 +4,6 @@ Holds the immutable node registry and edge list, and precomputes an adjacency
 list so traversal is O(1) per neighbor lookup instead of scanning all edges.
 """
 
-from __future__ import annotations
-
 from app.domain.edge import Edge
 from app.domain.node import Node
 

@@ -1,7 +1,5 @@
 """Edge entity — a directed dependency from one node to another."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass
 
 

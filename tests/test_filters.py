@@ -1,7 +1,5 @@
 """Unit tests for the individual route filters."""
 
-from __future__ import annotations
-
 from app.domain.node import Node
 from app.domain.route import Route
 from app.filters.end_in_sink_filter import EndInSinkFilter

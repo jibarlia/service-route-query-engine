@@ -4,8 +4,6 @@ Applied by default on every query (see api/routes.py::_build_filters) so a
 dangling edge target never surfaces as a real service in the response.
 """
 
-from __future__ import annotations
-
 from app.domain.route import Route
 
 

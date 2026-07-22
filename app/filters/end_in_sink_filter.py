@@ -4,8 +4,6 @@ Parametrized by the accepted sink kinds because the graph has more than one sink
 kind (``rds`` and ``sqs``); a caller can also target a single kind (``rds``).
 """
 
-from __future__ import annotations
-
 from collections.abc import Iterable
 
 from app.domain.route import Route

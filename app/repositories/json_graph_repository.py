@@ -11,8 +11,6 @@ The parsed graph is cached with ``functools.lru_cache`` so the file is read and
 parsed only once for the lifetime of the process.
 """
 
-from __future__ import annotations
-
 import json
 import logging
 from functools import lru_cache

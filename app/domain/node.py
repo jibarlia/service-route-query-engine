@@ -1,7 +1,5 @@
 """Node entity — one microservice, datastore, or queue in the dependency graph."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 from typing import Any
 

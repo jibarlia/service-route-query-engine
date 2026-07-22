@@ -5,8 +5,6 @@ auth (public) ──▶ user ──▶ travel
     └──▶ order (vulnerable) ──▶ postgres (rds sink)
 """
 
-from __future__ import annotations
-
 import pytest
 
 from app.domain.edge import Edge

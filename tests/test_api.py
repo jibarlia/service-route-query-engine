@@ -1,7 +1,5 @@
 """Sanity integration test for the /routes endpoint against the real graph."""
 
-from __future__ import annotations
-
 from fastapi.testclient import TestClient
 
 from app.api.routes import _build_filters

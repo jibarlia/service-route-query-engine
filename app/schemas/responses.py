@@ -4,8 +4,6 @@ The response is a render-ready graph structure: the reduced ``nodes`` and
 ``edges`` (the subgraph) plus the explicit ``routes`` that matched the query.
 """
 
-from __future__ import annotations
-
 from pydantic import BaseModel, Field
 
 from app.domain.route import Route
@@ -32,7 +30,7 @@ class RoutesResponse(BaseModel):
     routes: list[list[str]] = Field(description="Matching routes as ordered lists of node names")
 
     @classmethod
-    def from_result(cls, subgraph: Subgraph, routes: list[Route]) -> RoutesResponse:
+    def from_result(cls, subgraph: Subgraph, routes: list[Route]) -> "RoutesResponse":
         return cls(
             nodes=[
                 NodeOut(

@@ -6,8 +6,6 @@ dropped, so a client can render exactly the query result without filtering the
 full 40+ service graph itself.
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass
 
 from app.domain.edge import Edge

@@ -5,8 +5,6 @@ domain invariant tied to the node kinds present in the graph, not a deployment
 knob, so it lives in code as an enum rather than in configuration.
 """
 
-from __future__ import annotations
-
 from enum import StrEnum
 
 

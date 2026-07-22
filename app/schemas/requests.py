@@ -1,7 +1,5 @@
 """Request model for the /routes endpoint query parameters."""
 
-from __future__ import annotations
-
 from pydantic import BaseModel, Field
 
 from app.domain.sink_kind import SinkKind

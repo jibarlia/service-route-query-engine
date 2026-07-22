@@ -1,7 +1,5 @@
 """Keep routes that start in a publicly exposed service."""
 
-from __future__ import annotations
-
 from app.domain.route import Route
 
 
